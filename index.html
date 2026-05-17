@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Napoli Bites, restaurant moderne base sur pizzas, boxes, sandwichs suisse, tacos gratines, burgers, salades, pasticcio et jus frais.">
+  <title>Napoli Bites | Restaurant fast-good</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-texture" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navigation principale">
+      <a class="brand" href="#top" aria-label="Accueil Napoli Bites">
+        <img src="napoli_logo.png" alt="Logo Napoli Bites">
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-controls="primaryNav" aria-expanded="false">Menu</button>
+
+      <div class="main-nav" id="primaryNav">
+        <a href="#top">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#signature">Items</a>
+        <a href="#cartes">Cartes</a>
+        <a href="#contact">Contact</a>
+        <a class="mobile-nav-action" href="tel:+212614099933">Appeler</a>
+      </div>
+
+      <div class="nav-actions">
+        <a class="nav-phone" href="tel:+212614099933">0614099933</a>
+        <a class="cart-link" href="#menu" aria-label="Panier">Panier <strong id="cartCount">0</strong></a>
+        <a class="header-action" href="https://wa.me/212614099933" target="_blank" rel="noreferrer">Commander</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Napoli Bites special</p>
+        <h1>Box Mix Napoli Bites</h1>
+        <p class="hero-text">
+          Une box chaude, croustillante et bien garnie pour les grandes envies:
+          fromage fondant, sauce maison et toppings frais.
+        </p>
+        <div class="hero-actions">
+          <a class="btn ghost" href="#signature">View Details</a>
+          <a class="btn primary" href="https://wa.me/212614099933" target="_blank" rel="noreferrer">Book A Table</a>
+        </div>
+      </div>
+
+      <div class="hero-stage reveal" aria-label="Produit phare Napoli Bites">
+        <img class="hero-product" src="napoli_boxe_mixe.png" alt="Box Mix Napoli Bites">
+        <div class="price-chip">
+          <span>Signature</span>
+          <strong>45 DH</strong>
+        </div>
+      </div>
+
+      <div class="hero-rail" aria-label="Produits populaires">
+        <span>Pizza Royal 47 DH</span>
+        <span>Suisse Napoli Bites 40 DH</span>
+        <span>Tacos Mexicano 40 DH</span>
+        <span>Pasticcio Poulet 35 DH</span>
+      </div>
+    </section>
+
+    <section class="promise-strip" aria-label="Points forts">
+      <article class="reveal">
+        <span>01</span>
+        <h2>Produits chauds</h2>
+        <p>Des pizzas, boxes, tacos gratines et burgers servis avec une touche maison.</p>
+      </article>
+      <article class="reveal">
+        <span>02</span>
+        <h2>Commande rapide</h2>
+        <p>Ajoute tes plats au ticket, verifie le total et envoie la commande sur WhatsApp.</p>
+      </article>
+      <article class="reveal">
+        <span>03</span>
+        <h2>Frais & gourmand</h2>
+        <p>Salades, jus frais et cocktails pour accompagner les classiques Napoli Bites.</p>
+      </article>
+    </section>
+
+    <section class="signature" id="signature">
+      <div class="section-title reveal">
+        <p class="eyebrow">Produit heros</p>
+        <h2>La Box Mix devient l'icone du site.</h2>
+      </div>
+
+      <div class="signature-layout">
+        <div class="signature-image reveal">
+          <img src="napoli_boxe_mixe.png" alt="Box mix Napoli Bites avec avocat, fromage, noix et charcuterie">
+        </div>
+        <div class="signature-content reveal">
+          <p class="eyebrow">Crousty / cheesy / fresh</p>
+          <h3>Box Mix Napoli</h3>
+          <p>
+            Format genereux, texture croustillante, sauce maison et fromage fondant.
+            Une signature visuelle parfaite pour ouvrir l'appetit avant le menu.
+          </p>
+          <div class="signature-stats" aria-label="Details de la box">
+            <span><strong>45</strong> DH</span>
+            <span><strong>XL</strong> feeling</span>
+            <span><strong>100%</strong> frais</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu-section" id="menu">
+      <div class="section-title menu-title reveal">
+        <div>
+          <p class="eyebrow">Menu Napoli</p>
+          <h2>Choisis, ajoute, commande.</h2>
+        </div>
+        <div class="filters" role="tablist" aria-label="Filtres du menu">
+          <button class="filter is-active" type="button" data-filter="all" aria-selected="true">Tout</button>
+          <button class="filter" type="button" data-filter="pizza" aria-selected="false">Pizzas</button>
+          <button class="filter" type="button" data-filter="box" aria-selected="false">Boxes</button>
+          <button class="filter" type="button" data-filter="sandwich" aria-selected="false">Suisse</button>
+          <button class="filter" type="button" data-filter="tacos" aria-selected="false">Tacos</button>
+          <button class="filter" type="button" data-filter="fresh" aria-selected="false">Frais</button>
+        </div>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-list" id="menuList" aria-live="polite"></div>
+
+        <aside class="ticket reveal" aria-label="Ticket de commande">
+          <p class="eyebrow">Ticket live</p>
+          <h2>Commande</h2>
+          <div class="ticket-items" id="ticketItems">
+            <p class="ticket-empty">Ajoute des produits depuis le menu.</p>
+          </div>
+          <div class="ticket-total">
+            <span>Total estime</span>
+            <strong id="ticketTotal">0 DH</strong>
+          </div>
+          <a class="btn primary disabled" id="whatsappLink" href="https://wa.me/212614099933" target="_blank" rel="noreferrer">Envoyer sur WhatsApp</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="spotlight">
+      <div class="spotlight-card reveal">
+        <span>Pizza</span>
+        <strong>Margherita, thon, poulet, royal</strong>
+      </div>
+      <div class="spotlight-card reveal">
+        <span>Street food</span>
+        <strong>Burgers, tacos gratines, sandwichs suisse</strong>
+      </div>
+      <div class="spotlight-card reveal">
+        <span>Fresh side</span>
+        <strong>Salades, jus, cocktails fruit choco</strong>
+      </div>
+    </section>
+
+    <section class="gallery" id="cartes">
+      <div class="section-title reveal">
+        <p class="eyebrow">Cartes originales</p>
+        <h2>Les menus restent accessibles.</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <figure class="reveal">
+          <img src="menu1.jpeg" alt="Carte Napoli Bites pizzas, plats et boissons">
+          <figcaption>Pizzas, plats et boissons</figcaption>
+        </figure>
+        <figure class="reveal">
+          <img src="menu2.jpeg" alt="Carte Napoli Bites sandwichs, boxes, tacos, burgers, salades et pasticcio">
+          <figcaption>Sandwichs, boxes, tacos, burgers</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="contact-copy reveal">
+        <p class="eyebrow">Napoli Bites</p>
+        <h2>Pret pour les commandes.</h2>
+        <p>
+          Passe par WhatsApp, appelle directement ou retrouve Napoli Bites sur Instagram.
+        </p>
+      </div>
+      <div class="contact-actions reveal">
+        <a class="btn primary" href="https://wa.me/212614099933" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a class="btn ghost" href="https://www.instagram.com/napoli.bites" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+    </section>
+  </main>
+
+  <a class="whatsapp-float" href="https://wa.me/212614099933" target="_blank" rel="noreferrer" aria-label="Commander sur WhatsApp">WA</a>
+
+  <div class="mobile-order-bar" aria-label="Commande rapide mobile">
+    <button class="mobile-cart-button" type="button" data-scroll-ticket>
+      <span>Ticket</span>
+      <strong id="mobileCartTotal">0 DH</strong>
+    </button>
+    <a class="mobile-whatsapp disabled" id="mobileWhatsappLink" href="https://wa.me/212614099933" target="_blank" rel="noreferrer">WhatsApp</a>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <span>Napoli Bites</span>
+    <span>0614099933</span>
+    <span>100% frais</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
