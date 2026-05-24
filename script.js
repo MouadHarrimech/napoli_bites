@@ -74,6 +74,7 @@ const primaryNav = document.querySelector("#primaryNav");
 const navLinks = document.querySelectorAll(".main-nav a[href^='#']");
 const order = new Map();
 let toastTimer;
+let napoliSceneCleanup;
 
 function closeMobileNav() {
   document.body.classList.remove("nav-open");
@@ -237,8 +238,6 @@ function removeOrderItem(name) {
   renderTicket();
 }
 
-console.log("240 test done")
-
 function renderTicket() {
   const lines = Array.from(order.values());
   const total = lines.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -319,5 +318,245 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll(".reveal").forEach((item) => revealObserver.observe(item));
 
+function initNapoliScene() {
+  const canvas = document.querySelector("#napoliScene");
+
+  if (!canvas || !window.THREE) {
+    document.body.classList.add("no-webgl");
+    return;
+  }
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const THREE = window.THREE;
+  let renderer;
+
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      preserveDrawingBuffer: true,
+      powerPreference: "high-performance"
+    });
+  } catch (error) {
+    document.body.classList.add("no-webgl");
+    return;
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 0.36, 7.4);
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.85));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const root = new THREE.Group();
+  const ingredients = [];
+  const rings = [];
+  scene.add(root);
+
+  scene.add(new THREE.AmbientLight(0xffe6bf, 1.15));
+
+  const keyLight = new THREE.DirectionalLight(0xffd59a, 2.2);
+  keyLight.position.set(4.5, 5.8, 5.4);
+  scene.add(keyLight);
+
+  const rimLight = new THREE.PointLight(0xd53b2a, 2.5, 13);
+  rimLight.position.set(-3.2, 1.6, 3.2);
+  scene.add(rimLight);
+
+  const gold = new THREE.MeshStandardMaterial({
+    color: 0xd6a562,
+    metalness: 0.45,
+    roughness: 0.35,
+    emissive: 0x2b1503,
+    emissiveIntensity: 0.3
+  });
+  const tomato = new THREE.MeshStandardMaterial({ color: 0xd53b2a, roughness: 0.52, metalness: 0.05 });
+  const cheese = new THREE.MeshStandardMaterial({ color: 0xf0c889, roughness: 0.38, metalness: 0.04 });
+  const leaf = new THREE.MeshStandardMaterial({ color: 0x6fb546, roughness: 0.54, metalness: 0.03 });
+  const olive = new THREE.MeshStandardMaterial({ color: 0x1f2717, roughness: 0.48, metalness: 0.08 });
+  const crust = new THREE.MeshStandardMaterial({ color: 0xb86d2d, roughness: 0.42, metalness: 0.02 });
+
+  const ringGeometry = new THREE.TorusGeometry(2.55, 0.018, 12, 170);
+  const ringConfigs = [
+    { scale: [1.08, 0.74, 1], rotation: [1.31, 0, -0.16], y: -0.48 },
+    { scale: [0.86, 0.52, 1], rotation: [1.22, 0.12, 0.28], y: -0.04 },
+    { scale: [1.25, 0.42, 1], rotation: [1.43, -0.2, 0.18], y: -0.92 }
+  ];
+
+  ringConfigs.forEach((config) => {
+    const ring = new THREE.Mesh(ringGeometry, gold);
+    ring.scale.set(...config.scale);
+    ring.rotation.set(...config.rotation);
+    ring.position.y = config.y;
+    rings.push(ring);
+    root.add(ring);
+  });
+
+  const sliceShape = new THREE.Shape();
+  sliceShape.moveTo(0, 0.78);
+  sliceShape.lineTo(-0.52, -0.58);
+  sliceShape.quadraticCurveTo(0, -0.82, 0.52, -0.58);
+  sliceShape.lineTo(0, 0.78);
+
+  const sliceGeometry = new THREE.ExtrudeGeometry(sliceShape, {
+    depth: 0.06,
+    bevelEnabled: true,
+    bevelSize: 0.025,
+    bevelThickness: 0.025,
+    bevelSegments: 2
+  });
+  sliceGeometry.center();
+
+  const crustGeometry = new THREE.TorusGeometry(0.46, 0.035, 8, 28, Math.PI);
+
+  for (let index = 0; index < 5; index += 1) {
+    const angle = (index / 5) * Math.PI * 2 + 0.32;
+    const slice = new THREE.Group();
+    const body = new THREE.Mesh(sliceGeometry, cheese);
+    const edge = new THREE.Mesh(crustGeometry, crust);
+    edge.position.set(0, -0.5, 0.065);
+    edge.rotation.z = Math.PI;
+    slice.add(body, edge);
+    slice.position.set(Math.cos(angle) * 2.25, Math.sin(angle * 1.7) * 0.44 + 0.2, Math.sin(angle) * 1.0);
+    slice.rotation.set(-0.18 + Math.sin(angle) * 0.18, angle * 0.2, -angle + Math.PI / 2);
+    slice.scale.setScalar(0.5 + (index % 2) * 0.08);
+    slice.userData = { baseY: slice.position.y, speed: 0.86 + index * 0.08, phase: angle };
+    ingredients.push(slice);
+    root.add(slice);
+  }
+
+  const geometries = [
+    new THREE.SphereGeometry(0.13, 22, 18),
+    new THREE.BoxGeometry(0.14, 0.64, 0.14),
+    new THREE.TorusGeometry(0.15, 0.035, 10, 22),
+    new THREE.SphereGeometry(0.16, 18, 14)
+  ];
+  const materials = [tomato, cheese, olive, leaf];
+
+  for (let index = 0; index < 28; index += 1) {
+    const type = index % geometries.length;
+    const ingredient = new THREE.Mesh(geometries[type], materials[type]);
+    const angle = (index / 28) * Math.PI * 2;
+    const radius = 2.45 + Math.sin(index * 2.1) * 0.5;
+    ingredient.position.set(
+      Math.cos(angle) * radius,
+      Math.sin(index * 1.37) * 0.95 + 0.03,
+      Math.sin(angle) * 1.4
+    );
+    ingredient.rotation.set(angle * 0.6, angle, index * 0.31);
+    ingredient.scale.setScalar(type === 1 ? 0.68 : 0.72 + Math.sin(index) * 0.12);
+    ingredient.userData = {
+      baseY: ingredient.position.y,
+      speed: 0.72 + (index % 6) * 0.07,
+      phase: angle + index * 0.2
+    };
+    ingredients.push(ingredient);
+    root.add(ingredient);
+  }
+
+  const pointer = { x: 0, y: 0 };
+  const clock = new THREE.Clock();
+  let frameId = 0;
+
+  function resizeScene() {
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(rect.width));
+    const height = Math.max(1, Math.floor(rect.height));
+
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+
+  function renderScene() {
+    const elapsed = clock.getElapsedTime();
+    const scrollOffset = Math.min(window.scrollY / 900, 1.2);
+
+    root.rotation.y = elapsed * 0.18 + pointer.x * 0.22;
+    root.rotation.x = -0.08 + pointer.y * 0.08 - scrollOffset * 0.04;
+    root.position.y = Math.sin(elapsed * 0.8) * 0.045 - scrollOffset * 0.28;
+
+    rings.forEach((ring, index) => {
+      ring.rotation.z += 0.0035 + index * 0.0014;
+    });
+
+    ingredients.forEach((ingredient, index) => {
+      ingredient.position.y = ingredient.userData.baseY + Math.sin(elapsed * ingredient.userData.speed + ingredient.userData.phase) * 0.14;
+      ingredient.rotation.x += 0.006 + index * 0.00008;
+      ingredient.rotation.y += 0.008 + index * 0.0001;
+    });
+
+    renderer.render(scene, camera);
+    canvas.dataset.rendered = "true";
+
+    if (!reducedMotion) {
+      frameId = requestAnimationFrame(renderScene);
+    }
+  }
+
+  function handlePointerMove(event) {
+    pointer.x = (event.clientX / window.innerWidth - 0.5) * 2;
+    pointer.y = (event.clientY / window.innerHeight - 0.5) * -2;
+  }
+
+  resizeScene();
+  renderScene();
+
+  window.addEventListener("resize", resizeScene, { passive: true });
+  window.addEventListener("pointermove", handlePointerMove, { passive: true });
+
+  napoliSceneCleanup = () => {
+    cancelAnimationFrame(frameId);
+    window.removeEventListener("resize", resizeScene);
+    window.removeEventListener("pointermove", handlePointerMove);
+    renderer.dispose();
+    ringGeometry.dispose();
+    sliceGeometry.dispose();
+    crustGeometry.dispose();
+    geometries.forEach((geometry) => geometry.dispose());
+  };
+}
+
+function initMenuTilt() {
+  if (!menuList || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    return;
+  }
+
+  function resetCard(card) {
+    card.style.removeProperty("--tilt-x");
+    card.style.removeProperty("--tilt-y");
+  }
+
+  menuList.addEventListener("pointermove", (event) => {
+    const card = event.target.closest(".menu-card");
+
+    if (!card) {
+      return;
+    }
+
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    card.style.setProperty("--tilt-x", `${(-y * 5).toFixed(2)}deg`);
+    card.style.setProperty("--tilt-y", `${(x * 7).toFixed(2)}deg`);
+  });
+
+  menuList.addEventListener("pointerout", (event) => {
+    const card = event.target.closest(".menu-card");
+
+    if (card && !card.contains(event.relatedTarget)) {
+      resetCard(card);
+    }
+  });
+
+  menuList.addEventListener("pointerleave", () => {
+    menuList.querySelectorAll(".menu-card").forEach(resetCard);
+  });
+}
+
 renderMenu();
 renderTicket();
+initNapoliScene();
+initMenuTilt();

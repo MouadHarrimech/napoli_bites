@@ -29,7 +29,7 @@ body {
   margin: 0;
   color: var(--paper);
   background:
-    linear-gradient(180deg, rgba(5, 4, 3, 0.96), rgba(10, 8, 6, 0.98)),
+    linear-gradient(180deg, rgba(5, 4, 3, 0.96), rgba(10, 8, 6, 0.98) 62%, rgba(14, 10, 7, 0.98)),
     #050403;
   font-family: var(--sans);
   overflow-x: hidden;
@@ -309,7 +309,7 @@ button {
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(340px, 0.82fr) minmax(420px, 1.18fr);
   align-items: center;
@@ -317,6 +317,7 @@ button {
   padding: 154px clamp(24px, 5vw, 92px) 70px clamp(24px, 13vw, 246px);
   overflow: hidden;
   isolation: isolate;
+  perspective: 1400px;
 }
 
 .hero::before {
@@ -324,23 +325,65 @@ button {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(circle at 88% 22%, rgba(214, 165, 98, 0.2), transparent 28%),
-    radial-gradient(circle at 66% 54%, rgba(213, 59, 42, 0.12), transparent 34%),
-    linear-gradient(90deg, rgba(5, 4, 3, 0.98) 0%, rgba(5, 4, 3, 0.92) 52%, rgba(5, 4, 3, 0.7) 100%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0 1px, transparent 1px 7px);
+    linear-gradient(105deg, rgba(5, 4, 3, 0.99) 0%, rgba(5, 4, 3, 0.94) 48%, rgba(20, 12, 7, 0.74) 100%),
+    repeating-linear-gradient(118deg, rgba(240, 200, 137, 0.08) 0 1px, transparent 1px 13px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 38%);
   content: "";
 }
 
 .hero::after {
   position: absolute;
-  right: -16vw;
-  bottom: -30vh;
+  right: -5vw;
+  bottom: -12vh;
   z-index: -1;
-  width: 64vw;
-  height: 88vh;
-  background: radial-gradient(ellipse at center, rgba(214, 165, 98, 0.18), rgba(213, 59, 42, 0.07) 38%, transparent 68%);
+  width: min(760px, 62vw);
+  height: min(620px, 58vh);
+  background:
+    linear-gradient(135deg, rgba(214, 165, 98, 0.24), rgba(213, 59, 42, 0.05) 45%, transparent 76%),
+    repeating-linear-gradient(90deg, rgba(255, 249, 239, 0.1) 0 1px, transparent 1px 42px);
+  clip-path: polygon(10% 0, 100% 15%, 88% 100%, 0 78%);
   content: "";
-  opacity: 0.9;
+  opacity: 0.64;
+  transform: rotate(-7deg) skewX(-8deg);
+  filter: blur(0.5px);
+}
+
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-atmosphere::before,
+.hero-atmosphere::after {
+  position: absolute;
+  content: "";
+  opacity: 0.32;
+  transform: rotate(-16deg);
+}
+
+.hero-atmosphere::before {
+  top: 9%;
+  right: 4%;
+  width: min(540px, 42vw);
+  height: 78%;
+  background:
+    linear-gradient(90deg, transparent, rgba(240, 200, 137, 0.23), transparent),
+    repeating-linear-gradient(90deg, transparent 0 28px, rgba(255, 255, 255, 0.1) 28px 29px);
+}
+
+.hero-atmosphere::after {
+  right: 20%;
+  bottom: -16%;
+  width: min(640px, 52vw);
+  height: 42%;
+  border: 1px solid rgba(214, 165, 98, 0.26);
+  background:
+    linear-gradient(90deg, rgba(213, 59, 42, 0.12), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 18px);
+  transform: rotate(8deg) skewX(-22deg);
 }
 
 .hero-copy {
@@ -399,21 +442,52 @@ button {
   min-height: 560px;
   align-self: end;
   isolation: isolate;
+  transform-style: preserve-3d;
 }
 
 .hero-stage::before {
   position: absolute;
-  right: -2vw;
-  bottom: 0;
+  right: 2vw;
+  bottom: 2vh;
   z-index: -1;
-  width: min(720px, 49vw);
-  aspect-ratio: 1;
-  border-radius: 999px;
+  width: min(690px, 48vw);
+  height: min(360px, 26vw);
+  border: 1px solid rgba(214, 165, 98, 0.3);
+  border-radius: 50%;
   background:
-    radial-gradient(circle at 54% 42%, rgba(240, 200, 137, 0.18), transparent 38%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 64%);
+    conic-gradient(from 110deg, rgba(214, 165, 98, 0.18), rgba(213, 59, 42, 0.06), rgba(94, 165, 54, 0.12), rgba(214, 165, 98, 0.18)),
+    linear-gradient(180deg, rgba(255, 249, 239, 0.07), rgba(5, 4, 3, 0.06));
   content: "";
-  filter: blur(2px);
+  transform: rotateX(68deg) rotateZ(-8deg);
+  transform-origin: center;
+  filter: drop-shadow(0 38px 55px rgba(0, 0, 0, 0.68));
+}
+
+.hero-3d-canvas {
+  position: absolute;
+  inset: -14% -10% -9% -9%;
+  z-index: -1;
+  width: 120%;
+  height: 122%;
+  display: block;
+  pointer-events: none;
+  opacity: 0.98;
+}
+
+.stage-platform {
+  position: absolute;
+  right: 0;
+  bottom: 1vh;
+  z-index: -1;
+  width: min(680px, 48vw);
+  height: min(220px, 17vw);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 50%;
+  background:
+    linear-gradient(180deg, rgba(255, 249, 239, 0.12), rgba(214, 165, 98, 0.09) 42%, rgba(5, 4, 3, 0.08)),
+    repeating-linear-gradient(90deg, transparent 0 26px, rgba(255, 255, 255, 0.08) 26px 27px);
+  box-shadow: inset 0 0 58px rgba(240, 200, 137, 0.08), 0 52px 70px rgba(0, 0, 0, 0.46);
+  transform: rotateX(70deg) rotateZ(-7deg) translateZ(-24px);
 }
 
 .hero-product {
@@ -424,21 +498,25 @@ button {
   max-width: none;
   --product-offset: 0;
   border-radius: 999px;
-  filter: drop-shadow(0 38px 55px rgba(0, 0, 0, 0.78));
+  filter: drop-shadow(0 48px 58px rgba(0, 0, 0, 0.78)) saturate(1.08) contrast(1.04);
   -webkit-mask-image: radial-gradient(ellipse 58% 58% at 53% 49%, #000 0 58%, rgba(0, 0, 0, 0.86) 67%, transparent 79%);
   mask-image: radial-gradient(ellipse 58% 58% at 53% 49%, #000 0 58%, rgba(0, 0, 0, 0.86) 67%, transparent 79%);
   animation: floatPlate 5.8s ease-in-out infinite;
+  transform-style: preserve-3d;
 }
 
-.hero .price-chip,
+.hero .price-chip {
+  display: grid;
+}
+
 .hero .hero-rail {
-  display: none;
+  display: grid;
 }
 
 .price-chip {
   position: absolute;
-  left: 3%;
-  bottom: 13%;
+  left: 2%;
+  bottom: 15%;
   display: grid;
   gap: 6px;
   min-width: 150px;
@@ -448,6 +526,8 @@ button {
   background: rgba(5, 4, 3, 0.78);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
+  transform: translateZ(42px) rotate(-2deg);
+  animation: chipFloat 5.2s ease-in-out infinite;
 }
 
 .price-chip span {
@@ -485,6 +565,48 @@ button {
   font-weight: 900;
   text-align: center;
   backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.hero-rail span:hover {
+  border-color: rgba(240, 200, 137, 0.44);
+  background: rgba(15, 11, 8, 0.78);
+  transform: translateY(-2px);
+}
+
+.flavor-stack {
+  position: absolute;
+  top: 13%;
+  right: 3%;
+  display: grid;
+  gap: 10px;
+  transform: rotate(3deg) translateZ(50px);
+}
+
+.flavor-stack span {
+  width: max-content;
+  max-width: 190px;
+  padding: 10px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  color: var(--paper);
+  background: rgba(5, 4, 3, 0.62);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+}
+
+.flavor-stack span:nth-child(2) {
+  margin-left: 28px;
+  color: var(--gold-2);
+}
+
+.flavor-stack span:nth-child(3) {
+  margin-left: 10px;
+  color: #bfe1a9;
 }
 
 .promise-strip,
@@ -504,6 +626,17 @@ button {
   background:
     linear-gradient(140deg, rgba(214, 165, 98, 0.11), transparent 48%),
     rgba(8, 7, 6, 0.88);
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+  transform-style: preserve-3d;
+}
+
+.promise-strip article:hover,
+.spotlight-card:hover {
+  border-color: rgba(214, 165, 98, 0.36);
+  background:
+    linear-gradient(140deg, rgba(214, 165, 98, 0.16), transparent 48%),
+    rgba(11, 9, 7, 0.92);
+  transform: translateY(-4px) rotateX(2deg);
 }
 
 .promise-strip span,
@@ -564,6 +697,13 @@ button {
     rgba(255, 255, 255, 0.035);
   overflow: hidden;
   box-shadow: var(--shadow);
+  transform-style: preserve-3d;
+  transition: transform 260ms ease, border-color 260ms ease;
+}
+
+.signature-image:hover {
+  border-color: rgba(240, 200, 137, 0.58);
+  transform: perspective(1000px) rotateY(-4deg) rotateX(2deg) translateY(-4px);
 }
 
 .signature-image img {
@@ -682,6 +822,9 @@ button {
   transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
   animation: cardIn 360ms ease both;
   animation-delay: calc(var(--stagger, 0) * 26ms);
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .menu-card::before {
@@ -696,18 +839,40 @@ button {
   transition: opacity 220ms ease, transform 220ms ease;
 }
 
+.menu-card::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 22%, rgba(255, 249, 239, 0.11), transparent 48%),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.16));
+  content: "";
+  opacity: 0;
+  transform: translateX(-18%);
+  transition: opacity 220ms ease, transform 420ms ease;
+}
+
+.menu-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 .menu-card:hover {
   border-color: rgba(214, 165, 98, 0.42);
   background:
     linear-gradient(135deg, rgba(214, 165, 98, 0.16), transparent 48%),
     rgba(255, 255, 255, 0.055);
   box-shadow: 0 22px 52px rgba(0, 0, 0, 0.22);
-  transform: translateY(-4px);
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-4px);
 }
 
 .menu-card:hover::before {
   opacity: 0.85;
   transform: scale(1.08);
+}
+
+.menu-card:hover::after {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .menu-card.just-added {
@@ -892,6 +1057,14 @@ button {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.035);
   overflow: hidden;
+  transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+  transform-style: preserve-3d;
+}
+
+.gallery figure:hover {
+  border-color: rgba(214, 165, 98, 0.46);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+  transform: perspective(1200px) rotateX(2deg) translateY(-5px);
 }
 
 .gallery img {
@@ -972,11 +1145,22 @@ button {
 @keyframes floatPlate {
   0%,
   100% {
-    transform: translateX(var(--product-offset, 0)) translateY(0) rotate(-2deg);
+    transform: translateX(var(--product-offset, 0)) translateY(0) rotate(-2deg) rotateY(0deg);
   }
 
   50% {
-    transform: translateX(var(--product-offset, 0)) translateY(-14px) rotate(1deg);
+    transform: translateX(var(--product-offset, 0)) translateY(-14px) rotate(1deg) rotateY(-3deg);
+  }
+}
+
+@keyframes chipFloat {
+  0%,
+  100% {
+    transform: translateZ(42px) translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateZ(42px) translateY(-8px) rotate(1deg);
   }
 }
 
@@ -1124,7 +1308,21 @@ button {
   .hero-stage::before {
     right: 50%;
     width: min(720px, 92vw);
-    transform: translateX(50%);
+    height: min(330px, 42vw);
+    transform: translateX(50%) rotateX(68deg) rotateZ(-8deg);
+  }
+
+  .hero-3d-canvas {
+    inset: -12% -5% -6%;
+    width: 110%;
+    height: 118%;
+  }
+
+  .stage-platform {
+    right: 50%;
+    width: min(700px, 88vw);
+    height: min(210px, 28vw);
+    transform: translateX(50%) rotateX(70deg) rotateZ(-7deg) translateZ(-24px);
   }
 
   .hero-product {
@@ -1157,6 +1355,11 @@ button {
 
   .ticket {
     position: static;
+  }
+
+  .flavor-stack {
+    top: 9%;
+    right: 1%;
   }
 }
 
@@ -1271,6 +1474,7 @@ button {
   .hero-stage::before {
     bottom: -12px;
     width: min(470px, 112vw);
+    height: min(190px, 48vw);
   }
 
   .hero-product {
@@ -1278,8 +1482,45 @@ button {
     width: min(470px, 112vw);
   }
 
+  .hero-3d-canvas {
+    inset: -22% -20% -5%;
+    width: 140%;
+    height: 132%;
+    opacity: 0.72;
+  }
+
+  .stage-platform {
+    bottom: -12px;
+    width: min(470px, 106vw);
+    height: 128px;
+  }
+
   .price-chip {
-    bottom: 0;
+    bottom: -3px;
+    left: 0;
+    min-width: 118px;
+    padding: 12px 13px;
+  }
+
+  .price-chip strong {
+    font-size: 1.5rem;
+  }
+
+  .flavor-stack {
+    top: 2%;
+    right: 0;
+    gap: 7px;
+  }
+
+  .flavor-stack span {
+    max-width: 140px;
+    padding: 8px 10px;
+    font-size: 0.64rem;
+  }
+
+  .flavor-stack span:nth-child(2),
+  .flavor-stack span:nth-child(3) {
+    margin-left: 0;
   }
 
   .hero-rail {
