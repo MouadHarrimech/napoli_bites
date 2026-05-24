@@ -76,6 +76,22 @@ const order = new Map();
 let toastTimer;
 let napoliSceneCleanup;
 
+function setViewportHeight() {
+  document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+}
+
+function initPageEntrance() {
+  const finishIntro = () => document.body.classList.add("page-ready");
+
+  if (document.readyState === "complete") {
+    setTimeout(finishIntro, 900);
+  } else {
+    window.addEventListener("load", () => setTimeout(finishIntro, 700), { once: true });
+  }
+
+  setTimeout(finishIntro, 2600);
+}
+
 function closeMobileNav() {
   document.body.classList.remove("nav-open");
 
@@ -111,6 +127,9 @@ if (navToggle) {
 }
 
 window.addEventListener("scroll", updateHeaderState, { passive: true });
+window.addEventListener("resize", setViewportHeight, { passive: true });
+window.addEventListener("orientationchange", setViewportHeight, { passive: true });
+setViewportHeight();
 updateHeaderState();
 
 document.addEventListener("keydown", (event) => {
@@ -558,5 +577,6 @@ function initMenuTilt() {
 
 renderMenu();
 renderTicket();
+initPageEntrance();
 initNapoliScene();
 initMenuTilt();
